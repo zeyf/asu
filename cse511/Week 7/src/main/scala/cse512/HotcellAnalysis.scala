@@ -45,7 +45,7 @@ object HotcellAnalysis {
         + "x >= " + minX + " AND x <= " + maxX
         + " AND y >= " + minY + " AND y <= " + maxY
         + " AND z >= " + minZ + " AND z <= " + maxZ
-        + "ORDER BY z, y, x"
+        + " ORDER BY z, y, x"
       ).persist();
       pointsWithinIntersectingScope.createOrReplaceTempView("Df0")
 
