@@ -83,7 +83,7 @@ object HotcellAnalysis {
         SELECT
           COUNT(*) AS countval,
           SUM(pointval) AS sumval,
-          SUM(squared(pointval)) AS squaredsum from Df1);
+          SUM(squared(pointval)) AS squaredsum from Df1
         """
       )
       pointSum.createOrReplaceTempView("pointSum")
