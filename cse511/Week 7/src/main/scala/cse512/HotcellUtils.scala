@@ -47,79 +47,45 @@ object HotcellUtils {
     return calendar.get(Calendar.DAY_OF_MONTH)
   }
 
-  def calculateNumberOfAdjacentCells(
-    x: Int,
-    y: Int,
-    z: Int,
-    minX: Int,
-    maxX: Int,
-    minY: Int,
-    maxY: Int,
-    minZ: Int,
-    maxZ: Int
-  ): Int = {
-    var boundariesMet = 0
+  def squared(a:Int):Double=
+  {
+    return (a*a).toDouble;
+  }
+  
+  def CountNeighbours(minX: Int, minY: Int, minZ: Int, maxX: Int, maxY: Int, maxZ: Int, inputX: Int, inputY: Int, inputZ: Int): Int = 
+  {
+    var nCell = 0;
+    val resultingCase1 = 17
+    val resultingCase2 = 11
+    val resultingCase3 = 7
+    val resultingCaseAll = 26
 
-    if (
-      x == minX
-      || x == maxX
-    ) {
-      boundariesMet += 1
+    if (inputX == minX || inputX == maxX) {
+      nCell += 1;
     }
 
-    if (
-      y == minY
-      || y == maxY
-    ) {
-      boundariesMet += 1
+    if (inputY == minY || inputY == maxY) {
+      nCell += 1;
     }
 
-    if (
-      z == minZ
-      || z == maxZ
-    ) {
-      boundariesMet += 1
+    if (inputZ == minZ || inputZ == maxZ) {
+      nCell += 1;
     }
 
-    boundariesMet match {
-      case 0 => 26
-      case 1 => 17
-      case 2 => 11
-      case 3 => 7
-      case _ => 0
+    nCell match {
+      case 1 => resultingCase1
+      case 2 => resultingCase2
+      case 3 => resultingCase3
+      case _ => resultingCaseAll
     }
   }
 
-  def calculateGScore(
-    x: Int,
-    y: Int,
-    z: Int,
-    cellLoc: Int,
-    nCells: Int,
-    adjCellSum: Int,
-    average: Double,
-    standardDeviation: Double
-  ): Double = {
-    val numerator = cellLoc.toDouble - (average * adjCellSum.toDouble);
-    val denominator = (
-        standardDeviation
-        * math.sqrt(
-          (
-            (
-              nCells.toDouble
-              * adjCellSum.toDouble
-            )
-            - (
-              adjCellSum.toDouble
-              * adjCellSum.toDouble
-            )
-          ) / (
-            nCells.toDouble
-            - 1.0
-          )
-        )
-      )
-
-    return numerator / denominator
+  def calcGScore(x: Int, y: Int, z: Int, mean:Double, sd: Double, countn: Int, sumn: Int, numcells: Int): Double =
+  {
+    val numerator = (
+      sumn.toDouble - (mean*countn.toDouble)
+    )
+    val denominator = sd * math.sqrt((((numcells.toDouble * countn.toDouble) -(countn.toDouble * countn.toDouble))/(numcells.toDouble - 1.0).toDouble).toDouble).toDouble
+    return (numerator / denominator).toDouble
   }
 }

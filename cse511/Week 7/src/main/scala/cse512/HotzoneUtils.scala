@@ -1,66 +1,19 @@
 package cse512
 
 object HotzoneUtils {
+  def ST_Contains(queryRectangle: String, pointString: String): Boolean = {
+    // Split and parse the query rectangle coordinates
+    val Array(rect_x1, rect_y1, rect_x2, rect_y2) = queryRectangle.split(",").map(_.trim.toDouble)
 
-  def ST_Contains(
-    queryRectangle: String,
-    pointString: String
-  ): Boolean = {
-    // Validate the input if we are to actually calculate an intersection
-    if (isValidInput(queryRectangle, pointString)) {
-      // Parse out the coordinates
-      val rCoords = queryRectangle.split(",")
-      val pCoords = pointString.split(",")
-      val pX = pCoords(0).trim.toDouble
-      val pY = pCoords(1).trim.toDouble
-      val cX1 = rCoords(0).trim.toDouble
-      val cY1 = rCoords(1).trim.toDouble
-      val cX2 = rCoords(2).trim.toDouble
-      val cY2 = rCoords(3).trim.toDouble
+    // Split and parse the point coordinates
+    val Array(point_x, point_y) = pointString.split(",").map(_.trim.toDouble)
 
-      // Verify there if there is not a full intersection (the point is within the rectangle)
-      if (pX < math.min(cX1, cX2)) {
-        return false
-      } else if (pX > math.max(cX1, cX2)) {
-        return false
-      } else if (pY < math.min(cY1, cY2)) {
-        return false
-      } else if (pY > math.max(cY1, cY2)) {
-        return false
-      }
+    // Determine the lower and higher x, and lower and higher y values for the rectangle
+    val (lower_x, higher_x) = if (rect_x1 < rect_x2) (rect_x1, rect_x2) else (rect_x2, rect_x1)
+    val lower_y = math.min(rect_y1, rect_y2)
+    val higher_y = math.max(rect_y1, rect_y2)
 
-      // The point is within the rectangle, we have an intersection
-      return true
-    }
-
-    // We have invalid input
-    return false
-  }
-
-  def isValidInput(
-    queryRectangle: String,
-    pointString: String
-  ): Boolean = {
-    // Validate the string has something
-    if (
-      queryRectangle.length == 0
-      || pointString.length == 0
-    ) {
-      return false
-    }
-
-    // Validate we have the coordinates of the two corners of the rectangle
-    val rCoords = queryRectangle.split(",")
-    if (rCoords.length != 4) {
-      return false
-    }
-
-    // Validate we have the coordinateas of the point
-    val pCoords = pointString.split(",")
-    if (pCoords.length != 2) {
-      return false
-    }
-
-    return true
+    // Check if the point lies within the rectangle bounds
+    point_x >= lower_x && point_x <= higher_x && point_y >= lower_y && point_y <= higher_y
   }
 }
